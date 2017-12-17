@@ -17,23 +17,26 @@ import org.springframework.context.annotation.Configuration;
 
 public class AppConfiguration {
 
-    @Bean
-    public Docket newsApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build();
-    }
-    @Bean
-    public ApiInfo apiInfo() {
+
+    private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Spring Boot REST Sample with Swagger")
                 .description("Spring Boot REST Sample with Swagger")
                 .license("Apache License Version 2.0")
+                .version("1.0")
                 .build();
     }
 
+    @Bean
+    public Docket apis() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .pathMapping("/")
+                .select()
+                .paths(PathSelectors
+                        .regex("/api.*")).build();
 
+
+    }
 
 }

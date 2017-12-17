@@ -19,10 +19,15 @@
 	</parent>
 
 	<properties>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<start-class>com.moon.demo.Application</start-class>
+		<swagger.file>src/main/resources/swagger.yaml</swagger.file>
+		<project.build.directory>target</project.build.directory>
+		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
+		<generated-sources-java-path>main/java</generated-sources-java-path>
 	</properties>
 
 	<dependencies>
@@ -61,6 +66,12 @@
 			<version>2.6.1</version>
 			<scope>compile</scope>
 		</dependency>
+		<!--Added as build was failing while generating code from swagger-->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.9.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -79,6 +90,27 @@
 						<goals>
 							<goal>delombok</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.swagger</groupId>
+				<artifactId>swagger-codegen-maven-plugin</artifactId>
+				<version>2.2.3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${swagger.file}</inputSpec>
+							<language>spring</language>
+							<configOptions>
+								<sourceFolder>${generated-sources-java-path}</sourceFolder>
+								<dateLibrary>java</dateLibrary>
+							</configOptions>
+							<output>${generated-sources-path}</output>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
